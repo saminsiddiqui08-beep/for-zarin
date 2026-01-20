@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Feelings</title>
+  <link rel="icon" type="image/png" href="bunny.png">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;600&family=Caveat:wght@400;700&display=swap"
+    rel="stylesheet">
+
+  <style>
+    :root {
+      --zarin-bg: #050a14;
+      --zarin-text: #e2e8f0;
+      --zarins-pink: #d4a5a5;
+      --zarins-green: #8fbc8f;
+      --glass-bg: rgba(255, 255, 255, 0.02);
+      --glass-border: rgba(255, 255, 255, 0.1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: var(--zarin-bg);
+      color: var(--zarin-text);
+      font-family: 'Montserrat', sans-serif;
+      overflow-x: hidden;
+      overflow-y: auto;
+      position: relative;
+      min-height: 100vh;
+    }
+
+    #constellation {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .zarin-nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      padding: 25px 50px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 20;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      background: rgba(5, 10, 20, 0.6);
+    }
+
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.8rem;
+      color: var(--zarins-pink);
+      letter-spacing: 1px;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 40px;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--zarin-text);
+      font-size: 0.95rem;
+      transition: color 0.3s ease;
+      letter-spacing: 1px;
+      white-space: nowrap;
+      position: relative;
+      padding: 10px;
+    }
+
+    .nav-links a:hover {
+      color: var(--zarins-pink);
+    }
+
+    .content-wrapper {
+      position: relative;
+      z-index: 5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 140px;
+      padding-bottom: 40vh;
+      min-height: 100vh;
+    }
+
+    .glass-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 60px;
+      max-width: 800px;
+      width: 90%;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+      transform: translate3d(0, 0, 0);
+      will-change: transform, opacity;
+      animation: slideUpCard 1.2s ease-out forwards;
+    }
+
+    .note-bottom-right {
+      display: block;
+      width: 90%;
+      max-width: 800px;
+      margin-top: 40px;
+      text-align: right;
+      font-family: 'Caveat', cursive;
+      color: var(--zarins-green);
+      font-size: 1.3rem;
+      transform: rotate(-3deg);
+      opacity: 0;
+      animation: fadeInContent 1s ease-out 4.5s forwards;
+      padding-right: 10px;
+      line-height: 1.6;
+    }
+
+    h1.page-title {
+      font-family: 'Caveat', cursive;
+      font-size: 3.5rem;
+      color: var(--zarins-pink);
+      text-align: center;
+      margin-bottom: 10px;
+      opacity: 0;
+      animation: fadeInContent 1s ease-out 0.3s forwards;
+    }
+
+    h2.sub-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      color: rgba(255, 255, 255, 0.7);
+      text-align: center;
+      margin-bottom: 50px;
+      font-style: italic;
+      letter-spacing: 1px;
+      opacity: 0;
+      animation: fadeInContent 1s ease-out 0.6s forwards;
+    }
+
+    .letter-paragraph {
+      font-size: 1.05rem;
+      line-height: 1.8;
+      color: #e2e8f0;
+      margin-bottom: 25px;
+      opacity: 0;
+    }
+
+    .letter-paragraph:nth-of-type(1) {
+      animation: fadeInContent 1s ease-out 0.9s forwards;
+    }
+
+    .letter-paragraph:nth-of-type(2) {
+      animation: fadeInContent 1s ease-out 1.2s forwards;
+    }
+
+    .letter-paragraph:nth-of-type(3) {
+      animation: fadeInContent 1s ease-out 1.5s forwards;
+    }
+
+    .letter-paragraph:nth-of-type(4) {
+      animation: fadeInContent 1s ease-out 1.8s forwards;
+    }
+
+    .letter-paragraph:nth-of-type(5) {
+      animation: fadeInContent 1s ease-out 2.1s forwards;
+    }
+
+    .letter-paragraph:nth-of-type(6) {
+      animation: fadeInContent 1s ease-out 2.4s forwards;
+    }
+
+    .letter-paragraph:nth-of-type(7) {
+      animation: fadeInContent 1s ease-out 2.7s forwards;
+    }
+
+    .letter-paragraph:nth-of-type(8) {
+      animation: fadeInContent 1s ease-out 3.0s forwards;
+    }
+
+    .letter-paragraph:nth-of-type(9) {
+      animation: fadeInContent 1s ease-out 3.3s forwards;
+    }
+
+    .pink-text {
+      color: var(--zarins-pink);
+      font-weight: 600;
+    }
+
+    .green-text {
+      color: var(--zarins-green);
+      font-family: 'Caveat', cursive;
+      font-size: 1.8rem;
+      display: block;
+      margin-top: 20px;
+      margin-bottom: 40px;
+      text-align: right;
+      opacity: 0;
+      animation: fadeInContent 1s ease-out 3.6s forwards;
+    }
+
+    .divider {
+      border: 0;
+      height: 1px;
+      background: rgba(255, 255, 255, 0.1);
+      margin: 40px 0;
+      opacity: 0;
+      animation: fadeInContent 1s ease-out 4.0s forwards;
+    }
+
+    .artemis-container {
+      margin-top: 20px;
+      text-align: center;
+      opacity: 0;
+      animation: fadeInContent 1s ease-out 4.2s forwards;
+    }
+
+    .boarding-pass-img {
+      max-width: 100%;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      margin-top: 20px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+      transform: rotate(0deg);
+    }
+
+    .bunny-container {
+      position: fixed;
+      bottom: 50px;
+      left: 60px;
+      width: 90px;
+      z-index: 8;
+      opacity: 0.9;
+      filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.3));
+      animation: softBounce 3s ease-in-out infinite;
+      will-change: transform;
+    }
+
+    .bunny-img {
+      width: 100%;
+      height: auto;
+    }
+
+    @keyframes slideUpCard {
+      from {
+        transform: translate3d(0, 40px, 0);
+        opacity: 0;
+      }
+
+      to {
+        transform: translate3d(0, 0, 0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeInContent {
+      to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+      }
+    }
+
+    @keyframes softBounce {
+
+      0%,
+      100% {
+        transform: translate3d(0, 0, 0);
+      }
+
+      50% {
+        transform: translate3d(0, -10px, 0);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .zarin-nav {
+        flex-direction: column;
+        padding: 15px;
+        background: rgba(5, 10, 20, 0.95);
+      }
+
+      .nav-links {
+        width: 100%;
+        justify-content: center;
+        gap: 20px;
+      }
+
+      .nav-links a {
+        font-size: 0.85rem;
+      }
+
+      .content-wrapper {
+        padding-top: 180px;
+        padding-bottom: 40vh;
+      }
+
+      .glass-card {
+        padding: 30px 25px;
+        width: 88%;
+      }
+
+      .note-bottom-right {
+        font-size: 1.1rem;
+        width: 88%;
+        padding-right: 0;
+      }
+
+      h1.page-title {
+        font-size: 2.5rem;
+      }
+
+      .letter-paragraph {
+        font-size: 0.95rem;
+        line-height: 1.7;
+        margin-bottom: 20px;
+      }
+
+      .bunny-container {
+        width: 60px;
+        left: 20px;
+        bottom: 30px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <canvas id="constellation"></canvas>
+
+  <nav class="zarin-nav">
+    <a href="index.html" class="nav-logo">Z.S.</a>
+    <ul class="nav-links">
+      <li><a href="your-poems.html">Your Poems</a></li>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about-you.html">About You</a></li>
+    </ul>
+  </nav>
+
+  <div class="content-wrapper">
+    <div class="glass-card">
+      <h1 class="page-title">The Orbit</h1>
+      <h2 class="sub-title">If I tried to list the reasons, the sky would run out of stars.</h2>
+
+      <p class="letter-paragraph">I have said “I love you” many times, but words will never carry the full weight of
+        what that means. You might think my feelings are fleeting sparks, exaggerations that fade with time, but I feel
+        as though I have loved you forever, even if it has only been three years. And I know that I will continue to
+        love you endlessly.</p>
+
+      <p class="letter-paragraph">My love isn’t a spark, <span class="pink-text">Zarin</span>. It’s a gravity that keeps
+        me in your orbit no matter how far you drift, no matter if you look back at me or not. You have written of the
+        ache of departures, of people fading when the moment passes. But I am not a passing moment, I am gravity, and
+        gravity stays.</p>
+
+      <p class="letter-paragraph">I haven't just fallen for you. I have fallen for the details you probably think go
+        unnoticed. I have fallen for the void in your eyes, not an empty darkness, but a depth I want to fall into and
+        never stop falling. I have fallen for the way you talk. I notice the way your voice lands on words and the
+        pauses you choose. I have fallen for the way you laugh.</p>
+
+      <p class="letter-paragraph">I have fallen for the way you eat ice-cream (I saw you that day, and honestly my heart
+        melted faster than the ice cream ever could). I have kept every sticker you have made because they are little
+        pieces of your mind.</p>
+
+      <p class="letter-paragraph">I worry about you. I wonder if you have had breakfast, if sleep has been kind to you,
+        if dinner was skipped while your thoughts wandered into shadows. In your poems, I see the tenderness of someone
+        who notices everything. I want you to know that I notice too, and I try to notice everything I can. Not to be
+        creepy, but because every small detail makes the picture of <span class="pink-text">You</span> more beautiful. I
+        notice the pauses in your voice, the way your handwriting breathes across a page, the way your poems carry both
+        wound and healing in the same line.</p>
+
+      <p class="letter-paragraph">I sat beside you during the essay competition, and I couldn't stop admiring the
+        perfection of your handwriting. I couldn't stop watching the way your handwriting flowed across the page. It
+        wasn't just words on paper, but the way your thoughts take shape. The curves, the spaces... it felt like
+        watching you create an art with ink. I love the way you leave a trace of yourself in everything you touch.</p>
+
+      <p class="letter-paragraph">Your poems tell me you feel imperfect, that chaos lives inside you. I know I may not
+        be the person you want to fill that void with, and I know that I have my own flaws, and I cannot fix everything.
+        I know I cannot rewrite your past or compete with anyone who once held your heart. I won’t try to fill a void
+        with promises I can’t keep. Instead, I will stand beside it like a lantern in the dark - steady, gentle and
+        warm. I will be the person who doesn’t rush your healing, who doesn’t demand certainty, who doesn’t measure love
+        by possession. If you believe nothing lasts, I will let time be my answer. Showing up, staying kind, and
+        choosing you in ways that are quiet and consistent.</p>
+
+      <p class="letter-paragraph">I don’t love you despite your imperfections, I love you because of them. Your cracks
+        let me see the living person underneath. I see the beauty in your shadows, and I love you through them. I love
+        you because you are <span class="pink-text">You</span>. The universe seems to stop when you are near. I fell for
+        you because every glimpse felt like truth. Your poems, your stickers, your handwriting, your laugh, your eyes
+        each one is a doorway, and every doorway leads to you.</p>
+
+      <p class="letter-paragraph">You can push me away, you can believe that nothing lasts, but I am not going anywhere.
+        I am not asking for you to be perfect. I am just asking you to know that I love you infinitely. You are the most
+        important person in my universe, and I will keep choosing you, in every meal you skip, in every sleepless night,
+        in every poem that bleeds shadows into light.</p>
+
+      <span class="green-text">Je t'aime, Zarin.</span>
+
+      <hr class="divider">
+
+      <div class="artemis-container">
+        <p class="letter-paragraph" style="font-style: italic; opacity: 0.9;">
+          Oh, and I wanted to mention another thing...<br><br>
+          The moon is beautiful, isn’t it? And somehow, it carries more of you than you realize.
+          Your name is where it belongs, written among the stars, resting in the silence of the moon.
+        </p>
+
+        <img src="boarding-pass.png" alt="Artemis Boarding Pass" class="boarding-pass-img">
+      </div>
+
+    </div>
+    <div class="note-bottom-right">
+      By the way, did you notice<br>
+      there are exactly 138 stars here?<br>
+      Some numbers are more than numbers...
+    </div>
+
+  </div>
+  <div class="bunny-container">
+    <img src="bunny.png" alt="Bunny" class="bunny-img" onerror="this.style.display='none'">
+  </div>
+
+  <script>
+    const canvas = document.getElementById('constellation');
+    const ctx = canvas.getContext('2d');
+
+    let width, height;
+    let stars = [];
+    const starCount = 138;
+
+    function resize() {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width;
+      canvas.height = height;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+
+    class Star {
+      constructor() {
+        this.x = Math.random() * width;
+        this.y = Math.random() * height;
+        this.vx = (Math.random() - 0.5) * 0.3;
+        this.vy = (Math.random() - 0.5) * 0.3;
+        this.size = Math.random() * 2;
+      }
+
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+
+        if (this.x < 0 || this.x > width) this.vx *= -1;
+        if (this.y < 0 || this.y > height) this.vy *= -1;
+      }
+
+      draw() {
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    function init() {
+      stars = [];
+      for (let i = 0; i < starCount; i++) {
+        stars.push(new Star());
+      }
+    }
+    init();
+
+    function animate() {
+      ctx.clearRect(0, 0, width, height);
+      for (let i = 0; i < stars.length; i++) {
+        let star = stars[i];
+        star.update();
+        star.draw();
+      }
+      requestAnimationFrame(animate);
+    }
+    animate();
+  </script>
+</body>
+
+</html>
