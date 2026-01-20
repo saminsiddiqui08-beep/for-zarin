@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Poems</title>
+  <link rel="icon" type="image/png" href="bunny.png">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;600&family=Caveat:wght@400;700&display=swap"
+    rel="stylesheet">
+
+  <style>
+    :root {
+      --zarin-bg: #050a14;
+      --zarin-text: #e2e8f0;
+      --zarins-pink: #d4a5a5;
+      --zarins-green: #8fbc8f;
+      --glass-bg: rgba(255, 255, 255, 0.02);
+      --glass-border: rgba(255, 255, 255, 0.1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: var(--zarin-bg);
+      color: var(--zarin-text);
+      font-family: 'Montserrat', sans-serif;
+      overflow-x: hidden;
+      overflow-y: auto;
+      position: relative;
+      min-height: 100vh;
+    }
+
+    .stars-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .star {
+      position: absolute;
+      background: white;
+      border-radius: 50%;
+      opacity: 0.8;
+      animation: twinkle var(--duration) ease-in-out infinite alternate;
+    }
+
+    .zarin-nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      padding: 25px 50px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 20;
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+      background: rgba(5, 10, 20, 0.5);
+    }
+
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.8rem;
+      color: var(--zarins-pink);
+      letter-spacing: 1px;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 40px;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--zarin-text);
+      font-size: 0.95rem;
+      transition: color 0.3s ease;
+      letter-spacing: 1px;
+      white-space: nowrap;
+      position: relative;
+      padding: 10px;
+    }
+
+    .nav-links a:hover {
+      color: var(--zarins-pink);
+    }
+
+    .content-wrapper {
+      position: relative;
+      z-index: 5;
+      display: flex;
+      justify-content: center;
+      padding-top: 140px;
+      padding-bottom: 120px;
+      min-height: 100vh;
+    }
+
+    .glass-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 60px;
+      max-width: 800px;
+      width: 90%;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+
+      transform: translate3d(0, 0, 0);
+      will-change: transform, opacity;
+
+      animation: slideUpCard 1.2s ease-out, breatheGlow 6s ease-in-out infinite alternate;
+    }
+
+    h1.page-title {
+      font-family: 'Caveat', cursive;
+      font-size: 3.5rem;
+      color: var(--zarins-pink);
+      text-align: center;
+      margin-bottom: 10px;
+      opacity: 0;
+      animation: fadeInContent 1s ease-out 0.3s forwards;
+    }
+
+    h2.sub-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      color: rgba(255, 255, 255, 0.7);
+      text-align: center;
+      margin-bottom: 50px;
+      font-style: italic;
+      letter-spacing: 1px;
+      opacity: 0;
+      animation: fadeInContent 1s ease-out 0.6s forwards;
+    }
+
+    .letter-paragraph {
+      font-size: 1.05rem;
+      line-height: 1.8;
+      color: #e2e8f0;
+      margin-bottom: 25px;
+      opacity: 0;
+      text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+    }
+
+    .letter-paragraph:nth-child(3) {
+      animation: fadeInContent 1s ease-out 0.9s forwards;
+    }
+
+    .letter-paragraph:nth-child(4) {
+      animation: fadeInContent 1s ease-out 1.2s forwards;
+    }
+
+    .letter-paragraph:nth-child(5) {
+      animation: fadeInContent 1s ease-out 1.5s forwards;
+    }
+
+    .letter-paragraph:nth-child(6) {
+      animation: fadeInContent 1s ease-out 1.8s forwards;
+    }
+
+    .letter-paragraph:nth-child(7) {
+      animation: fadeInContent 1s ease-out 2.1s forwards;
+    }
+
+    .letter-paragraph:nth-child(8) {
+      animation: fadeInContent 1s ease-out 2.4s forwards;
+    }
+
+    .letter-paragraph:nth-child(9) {
+      animation: fadeInContent 1s ease-out 2.7s forwards;
+    }
+
+    .letter-paragraph:nth-child(10) {
+      animation: fadeInContent 1s ease-out 3.0s forwards;
+    }
+
+    .highlight {
+      color: var(--zarins-pink);
+      font-weight: 600;
+      font-style: normal;
+    }
+
+    .signature {
+      margin-top: 50px;
+      text-align: right;
+      font-family: 'Caveat', cursive;
+      font-size: 2rem;
+      color: var(--zarins-green);
+      opacity: 0;
+      animation: fadeInContent 1s ease-out 3.3s forwards;
+    }
+
+    .bunny-container {
+      position: fixed;
+      bottom: 50px;
+      left: 60px;
+      width: 90px;
+      z-index: 8;
+      opacity: 0.9;
+      filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.3));
+      animation: softBounce 3s ease-in-out infinite;
+      will-change: transform;
+    }
+
+    .bunny-img {
+      width: 100%;
+      height: auto;
+    }
+
+    @keyframes slideUpCard {
+      from {
+        transform: translate3d(0, 40px, 0);
+        opacity: 0;
+      }
+
+      to {
+        transform: translate3d(0, 0, 0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeInContent {
+      to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+      }
+    }
+
+    @keyframes breatheGlow {
+      0% {
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+        border-color: rgba(255, 255, 255, 0.1);
+      }
+
+      100% {
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+        border-color: rgba(255, 255, 255, 0.2);
+      }
+    }
+
+    @keyframes softBounce {
+
+      0%,
+      100% {
+        transform: translate3d(0, 0, 0);
+      }
+
+      50% {
+        transform: translate3d(0, -10px, 0);
+      }
+    }
+
+    @keyframes twinkle {
+      0% {
+        opacity: 0.3;
+        transform: scale(1);
+      }
+
+      100% {
+        opacity: 1;
+        transform: scale(1.2);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .zarin-nav {
+        flex-direction: column;
+        padding: 15px;
+        background: rgba(5, 10, 20, 0.95);
+      }
+
+      .nav-links {
+        width: 100%;
+        justify-content: center;
+        gap: 20px;
+      }
+
+      .nav-links a {
+        font-size: 0.85rem;
+      }
+
+      .content-wrapper {
+        padding-top: 160px;
+        padding-bottom: 18vh;
+      }
+
+      .glass-card {
+        padding: 30px 25px;
+        width: 88%;
+      }
+
+      h1.page-title {
+        font-size: 2.5rem;
+      }
+
+      .letter-paragraph {
+        font-size: 0.95rem;
+        line-height: 1.7;
+        margin-bottom: 20px;
+      }
+
+      .bunny-container {
+        width: 60px;
+        left: 20px;
+        bottom: 30px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="stars-container" id="star-field"></div>
+
+  <nav class="zarin-nav">
+    <a href="index.html" class="nav-logo">Z.S.</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="my-feelings.html">My Feelings</a></li>
+      <li><a href="about-you.html">About You</a></li>
+    </ul>
+  </nav>
+
+  <div class="content-wrapper">
+    <div class="glass-card">
+      <h1 class="page-title">The Art of You</h1>
+      <h2 class="sub-title">Thoughts on the words you bleed onto paper.</h2>
+
+      <p class="letter-paragraph">I haven't said this to you directly, but I am a big fan of your writing, and I really
+        mean it. Your poems aren't the generic happy verses people expect. You write about the shadows, the mundane, and
+        the sadness. You reveal places others don't see, the private suffering behind a facade of "nothing's wrong". But
+        that is exactly why they are beautiful. Most people write to escape reality, but you write to confront it.</p>
+
+      <p class="letter-paragraph">Reading your poems feels like looking into a mirror you usually keep covered. I see a
+        struggle for perfectionism in your lines. I see the anxiety of being bound by routine, the feeling of a chaos
+        inside while the world thinks nothing is wrong.</p>
+
+      <p class="letter-paragraph">It feels like you are searching for a purpose that was lost, or maybe hiding your true
+        self because you think the world won't understand. You write about imperfections as if they are sins, but I need
+        you to know something... Those imperfections make you who you are.</p>
+
+      <p class="letter-paragraph">And then there is <span class="highlight">Anorexic Angel</span>. You gave this poem to
+        me yourself, and I hold that close to my heart.</p>
+
+      <p class="letter-paragraph">When I read it, I see more than just the meaning of the poem. I see the symbolism of
+        the Angel, something pure and holy, being destroyed by a law that demands hunger. It feels like a metaphor for
+        starving oneself of happiness or authenticity just to fit a mold. The Angel is thrown from heaven, labeled as
+        filthy and small because it couldn't keep up with the divine compulsion to be perfect.</p>
+
+      <p class="letter-paragraph">It paints a picture of someone trying so hard to be what they think they should be,
+        that they end up hurting the beautiful person they are.</p>
+
+      <p class="letter-paragraph">To me, your imperfections aren't flaws, they are the brushstrokes that make you real.
+        I don't love the mask; I love the person underneath who feels everything so deeply.</p>
+
+      <p class="letter-paragraph">I love you because you are you. You, exactly as you are, are my definition of perfect,
+        and I hope you never forget that.</p>
+
+      <div class="signature">
+        - Yours
+      </div>
+    </div>
+  </div>
+
+  <div class="bunny-container">
+    <img src="bunny.png" alt="Bunny" class="bunny-img" onerror="this.style.display='none'">
+  </div>
+
+  <script>
+    const starContainer = document.getElementById('star-field');
+    const isMobile = window.innerWidth < 768;
+    const starCount = isMobile ? 100 : 250;
+
+    for (let i = 0; i < starCount; i++) {
+      const star = document.createElement('div');
+      star.className = 'star';
+
+      const x = Math.random() * 100;
+      const y = Math.random() * 100;
+      const size = Math.random() * 2 + 1;
+      const opacity = Math.random() * 0.7 + 0.3;
+      const duration = Math.random() * 3 + 2 + 's';
+
+      star.style.left = `${x}%`;
+      star.style.top = `${y}%`;
+      star.style.width = `${size}px`;
+      star.style.height = `${size}px`;
+      star.style.opacity = opacity;
+      star.style.setProperty('--duration', duration);
+
+      starContainer.appendChild(star);
+    }
+  </script>
+</body>
+
+</html>
