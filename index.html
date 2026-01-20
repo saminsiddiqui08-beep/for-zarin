@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>For Zarin</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;600&family=Caveat:wght@400;700&display=swap"
+    rel="stylesheet">
+
+  <style>
+    :root {
+      --zarin-bg: #050a14;
+      --zarin-text: #e2e8f0;
+      --zarins-pink: #d4a5a5;
+      --zarins-green: #8fbc8f;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: var(--zarin-bg);
+      color: var(--zarin-text);
+      font-family: 'Montserrat', sans-serif;
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+      position: relative;
+    }
+
+    .stars-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .star {
+      position: absolute;
+      background: white;
+      border-radius: 50%;
+      box-shadow: 0 0 2px rgba(255, 255, 255, 0.8);
+    }
+
+    #zarins-fireworks {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      cursor: default;
+      pointer-events: auto;
+    }
+
+    .zarin-nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      padding: 25px 50px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 20;
+      transition: all 0.3s ease;
+    }
+
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.8rem;
+      color: var(--zarins-pink);
+      letter-spacing: 1px;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 40px;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--zarin-text);
+      font-size: 0.95rem;
+      transition: color 0.3s ease;
+      letter-spacing: 1px;
+      white-space: nowrap;
+      position: relative;
+      padding: 10px;
+    }
+
+    .nav-links a:hover {
+      color: var(--zarins-pink);
+    }
+
+    .zarin-universe {
+      position: relative;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      z-index: 5;
+      padding: 20px;
+      pointer-events: none;
+    }
+
+    .zarin-universe * {
+      pointer-events: auto;
+    }
+
+    h1.moonlight-header {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.8rem, 5vw, 4.5rem);
+      font-weight: 300;
+      margin-bottom: 5px;
+      color: #fff;
+      text-shadow: 0 0 20px rgba(212, 165, 165, 0.3);
+      animation: fadeIn 2s ease-out;
+      font-variant-numeric: lining-nums;
+      white-space: nowrap;
+    }
+
+    h2.subtitle {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(0.9rem, 2.5vw, 1.6rem);
+      color: var(--zarins-pink);
+      font-style: italic;
+      margin-bottom: 35px;
+      font-weight: 400;
+      animation: fadeIn 2s ease-out 0.5s forwards;
+      opacity: 0;
+    }
+
+    p.body-text {
+      max-width: 600px;
+      font-size: 1rem;
+      line-height: 1.8;
+      color: rgba(255, 255, 255, 0.9);
+      margin-bottom: 40px;
+      animation: fadeIn 2s ease-out 1s forwards;
+      opacity: 0;
+    }
+
+    .handwritten-note {
+      font-family: 'Caveat', cursive;
+      color: var(--zarins-green);
+      font-size: 1.4rem;
+      position: absolute;
+      animation: float 4s ease-in-out infinite;
+      z-index: 8;
+      pointer-events: none;
+    }
+
+    .note-top-right {
+      top: 100px;
+      right: 8%;
+      transform: rotate(5deg);
+      text-align: right;
+    }
+
+    .note-bottom {
+      bottom: 80px;
+      right: 8%;
+      transform: rotate(-2deg);
+      color: rgba(255, 255, 255, 0.6);
+      text-align: right;
+    }
+
+    .bunny-container {
+      position: absolute;
+      bottom: 50px;
+      left: 60px;
+      width: 90px;
+      z-index: 8;
+      opacity: 0.9;
+      animation: softBounce 3s ease-in-out infinite;
+    }
+
+    .bunny-img {
+      width: 100%;
+      height: auto;
+      filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
+    }
+
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes float {
+
+      0%,
+      100% {
+        transform: translateY(0) rotate(5deg);
+      }
+
+      50% {
+        transform: translateY(-8px) rotate(5deg);
+      }
+    }
+
+    @keyframes softBounce {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .zarin-nav {
+        flex-direction: column;
+        padding: 10px;
+        background: rgba(5, 10, 20, 0.8);
+        backdrop-filter: blur(5px);
+      }
+
+      .nav-logo {
+        margin-bottom: 10px;
+        font-size: 1.6rem;
+      }
+
+      .nav-links {
+        width: 100%;
+        justify-content: center;
+        gap: 20px;
+      }
+
+      .nav-links a {
+        font-size: 0.85rem;
+      }
+
+      h1.moonlight-header {
+        margin-top: 60px;
+      }
+
+      .zarin-universe {
+        padding-bottom: 18vh;
+      }
+
+      .note-top-right {
+        top: 120px;
+        right: 5%;
+        font-size: 1rem;
+      }
+
+      .note-bottom {
+        bottom: 120px;
+        right: 5%;
+        font-size: 1rem;
+      }
+
+      .bunny-container {
+        position: fixed;
+        width: 60px;
+        left: 20px;
+        bottom: 30px;
+      }
+
+      p.body-text {
+        font-size: 0.9rem;
+        padding: 0 10px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="stars-container" id="star-field"></div>
+
+  <canvas id="zarins-fireworks"></canvas>
+
+  <nav class="zarin-nav">
+    <a href="index.html" class="nav-logo">Z.S.</a>
+    <ul class="nav-links">
+      <li><a href="your-poems.html">Your Poems</a></li>
+      <li><a href="my-feelings.html">My Feelings</a></li>
+      <li><a href="about-you.html">About You</a></li>
+    </ul>
+  </nav>
+
+  <div class="handwritten-note note-top-right">
+    The story starts up here...
+  </div>
+
+  <div class="zarin-universe">
+    <h1 class="moonlight-header">Happy 18th Birthday, Zarin.</h1>
+
+    <h2 class="subtitle">A small corner of the universe made just for you.</h2>
+
+    <p class="body-text">
+      I wanted to give you something that lasts longer than a wish.
+      This is a collection of memories, thoughts, and a little bit of code.
+      <br><br>
+      Keep writing, keep being yourself, and continue creating the art only you can bring to life.
+    </p>
+
+    <div class="handwritten-note note-bottom">
+      The sky is interactive. Try tapping it.
+    </div>
+  </div>
+
+  <div class="bunny-container">
+    <img src="bunny.png" alt="Bunny" class="bunny-img" onerror="this.style.display='none'">
+  </div>
+
+  <script>
+    const starContainer = document.getElementById('star-field');
+    const isMobile = window.innerWidth < 768;
+
+    const starCount = isMobile ? 100 : 250;
+
+    for (let i = 0; i < starCount; i++) {
+      const star = document.createElement('div');
+      star.className = 'star';
+
+      const x = Math.random() * 100;
+      const y = Math.random() * 100;
+      const size = Math.random() * 2 + 1;
+
+      const opacity = Math.random() * 0.7 + 0.3;
+
+      star.style.left = `${x}%`;
+      star.style.top = `${y}%`;
+      star.style.width = `${size}px`;
+      star.style.height = `${size}px`;
+      star.style.opacity = opacity;
+
+      starContainer.appendChild(star);
+    }
+
+    const canvas = document.getElementById('zarins-fireworks');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const particlesPerFirework = isMobile ? 30 : 80;
+
+    let particles = [];
+
+    function createFirework(x, y) {
+      const colors = [
+        '#d4a5a5', '#d4a5a5', '#d4a5a5', // Pink
+        '#8fbc8f', '#8fbc8f', '#8fbc8f', // Green
+        '#f1c40f', '#ffffff'
+      ];
+
+      for (let i = 0; i < particlesPerFirework; i++) {
+        particles.push({
+          x: x,
+          y: y,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          radius: Math.random() * 2.5,
+          velocity: {
+            x: (Math.random() - 0.5) * (isMobile ? 5 : 8),
+            y: (Math.random() - 0.5) * (isMobile ? 5 : 8)
+          },
+          alpha: 1,
+          decay: Math.random() * 0.015 + 0.005
+        });
+      }
+    }
+
+    function animate() {
+      requestAnimationFrame(animate);
+
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.globalCompositeOperation = 'source-over';
+
+      particles.forEach((particle, index) => {
+        if (particle.alpha > 0) {
+          particle.velocity.y += 0.03;
+          particle.x += particle.velocity.x;
+          particle.y += particle.velocity.y;
+          particle.alpha -= particle.decay;
+
+          ctx.save();
+          ctx.globalAlpha = particle.alpha;
+          ctx.beginPath();
+          ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2, false);
+          ctx.fillStyle = particle.color;
+          ctx.fill();
+          ctx.restore();
+        } else {
+          particles.splice(index, 1);
+        }
+      });
+    }
+
+    function handleInteraction(e) {
+      if (e.target.closest('a') || e.target.closest('nav')) {
+        return;
+      }
+
+      e.preventDefault();
+
+      let clientX, clientY;
+      if (e.type === 'touchstart') {
+        clientX = e.touches[0].clientX;
+        clientY = e.touches[0].clientY;
+      } else {
+        clientX = e.clientX;
+        clientY = e.clientY;
+      }
+      createFirework(clientX, clientY);
+    }
+
+    window.addEventListener('mousedown', handleInteraction);
+    window.addEventListener('touchstart', handleInteraction, { passive: false });
+
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+
+    animate();
+  </script>
+</body>
+
+</html>
