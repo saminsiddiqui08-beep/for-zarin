@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About You</title>
+  <link rel="icon" type="image/png" href="bunny.png">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;600&family=Caveat:wght@400;700&display=swap"
+    rel="stylesheet">
+
+  <style>
+    :root {
+      --zarin-bg: #050a14;
+      --zarin-text: #e2e8f0;
+      --zarins-pink: #d4a5a5;
+      --zarins-green: #8fbc8f;
+      --glass-bg: rgba(255, 255, 255, 0.05);
+      --glass-border: rgba(255, 255, 255, 0.1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: var(--zarin-bg);
+      color: var(--zarin-text);
+      font-family: 'Montserrat', sans-serif;
+      overflow-x: hidden;
+      overflow-y: auto;
+      position: relative;
+      min-height: 100vh;
+    }
+
+    .stars-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .star {
+      position: absolute;
+      background: white;
+      border-radius: 50%;
+      opacity: 0.8;
+    }
+
+    .zarin-nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      padding: 25px 50px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 20;
+      backdrop-filter: blur(8px);
+      background: rgba(5, 10, 20, 0.6);
+    }
+
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.8rem;
+      color: var(--zarins-pink);
+      letter-spacing: 1px;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 40px;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--zarin-text);
+      font-size: 0.95rem;
+      transition: color 0.3s ease;
+      letter-spacing: 1px;
+      white-space: nowrap;
+      padding: 10px;
+    }
+
+    .nav-links a:hover {
+      color: var(--zarins-pink);
+    }
+
+    .scene-wrapper {
+      position: relative;
+      width: 100%;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      perspective: 1200px;
+      z-index: 5;
+      padding-top: 80px;
+      touch-action: pan-y;
+    }
+
+    .carousel {
+      width: 320px;
+      height: 480px;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .carousel-card {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      left: 0;
+      top: 0;
+      border-radius: 20px;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 30px;
+      cursor: pointer;
+      transition: opacity 0.5s, filter 0.5s;
+      backface-visibility: hidden;
+    }
+
+    .card-icon {
+      font-size: 3.5rem;
+      margin-bottom: 20px;
+      filter: drop-shadow(0 0 10px rgba(212, 165, 165, 0.4));
+      transition: all 0.5s ease;
+    }
+
+    .card-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem;
+      color: var(--zarins-pink);
+      margin-bottom: 15px;
+      font-weight: 600;
+    }
+
+    .card-text {
+      font-size: 0.95rem;
+      line-height: 1.7;
+      color: #e2e8f0;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.5s ease 0.3s;
+      display: none;
+    }
+
+    .highlight {
+      color: var(--zarins-pink);
+      font-weight: 600;
+    }
+
+    .carousel-card.active .card-text {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .carousel-card.active .card-icon {
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+
+    .carousel-card:not(.active) {
+      opacity: 0.4;
+      filter: blur(1px);
+    }
+
+    .instruction {
+      margin-top: 40px;
+      margin-bottom: 10px;
+      font-family: 'Caveat', cursive;
+      color: var(--zarins-green);
+      font-size: 1.3rem;
+      opacity: 0.9;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+      z-index: 10;
+    }
+
+    .controls {
+      margin-top: 10px;
+      display: flex;
+      gap: 40px;
+      z-index: 10;
+    }
+
+    .control-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: var(--zarin-text);
+      padding: 10px 25px;
+      border-radius: 30px;
+      font-family: 'Montserrat', sans-serif;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .control-btn:hover {
+      background: rgba(212, 165, 165, 0.2);
+      border-color: var(--zarins-pink);
+    }
+
+    .fear-section {
+      position: relative;
+      z-index: 5;
+      width: 90%;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 80px 0;
+      text-align: center;
+    }
+
+    .fear-card {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 50px 40px;
+      backdrop-filter: blur(8px);
+    }
+
+    .fear-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem;
+      color: var(--zarins-pink);
+      margin-bottom: 30px;
+    }
+
+    .fear-text {
+      font-size: 1.05rem;
+      line-height: 1.9;
+      color: #e2e8f0;
+    }
+
+    .garden-wrapper {
+      position: relative;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 5;
+      padding: 100px 20px 200px 20px;
+    }
+
+    .garden-text {
+      max-width: 600px;
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .garden-header {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem;
+      color: var(--zarins-green);
+      margin-bottom: 15px;
+    }
+
+    .garden-sub {
+      font-size: 1rem;
+      line-height: 1.6;
+      opacity: 0.9;
+    }
+
+    .seed-container {
+      position: relative;
+      width: 200px;
+      height: 350px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      cursor: pointer;
+    }
+
+    .seed-btn {
+      width: 20px;
+      height: 20px;
+      background: var(--zarins-pink);
+      border-radius: 50%;
+      box-shadow: 0 0 15px var(--zarins-pink);
+      animation: pulseSeed 2s infinite;
+      transition: all 0.5s ease;
+      z-index: 2;
+      margin-bottom: 20px;
+    }
+
+    .flower-svg {
+      position: absolute;
+      bottom: 0;
+      width: 120px;
+      height: 0;
+      overflow: hidden;
+      transition: height 2s cubic-bezier(0.4, 0, 0.2, 1);
+      filter: drop-shadow(0 0 15px rgba(212, 165, 165, 0.5));
+    }
+
+    .flower-svg svg {
+      width: 100%;
+      height: 200px;
+      fill: none;
+      stroke: var(--zarins-pink);
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .click-hint {
+      margin-top: 20px;
+      font-family: 'Caveat', cursive;
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 1rem;
+    }
+
+    .seed-container.bloomed .seed-btn {
+      opacity: 0;
+      transform: scale(0);
+    }
+
+    .seed-container.bloomed .flower-svg {
+      height: 200px;
+    }
+
+    @keyframes pulseSeed {
+      0% {
+        transform: scale(1);
+        box-shadow: 0 0 10px var(--zarins-pink);
+      }
+
+      50% {
+        transform: scale(1.3);
+        box-shadow: 0 0 25px var(--zarins-pink);
+      }
+
+      100% {
+        transform: scale(1);
+        box-shadow: 0 0 10px var(--zarins-pink);
+      }
+    }
+
+    .bunny-container {
+      position: fixed;
+      bottom: 30px;
+      left: 30px;
+      width: 70px;
+      z-index: 8;
+      opacity: 0.9;
+      animation: softBounce 3s ease-in-out infinite;
+    }
+
+    .bunny-img {
+      width: 100%;
+      height: auto;
+    }
+
+    @keyframes softBounce {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .zarin-nav {
+        flex-direction: column;
+        padding: 15px;
+        background: rgba(5, 10, 20, 0.95);
+      }
+
+      .nav-links {
+        gap: 20px;
+        width: 100%;
+        justify-content: center;
+      }
+
+      .nav-links a {
+        font-size: 0.85rem;
+      }
+
+      .scene-wrapper {
+        min-height: 90vh;
+        padding-top: 140px;
+      }
+
+      .carousel {
+        width: 85vw;
+        height: 50vh;
+      }
+
+      .carousel-card {
+        padding: 20px 15px;
+      }
+
+      .card-title {
+        font-size: 1.3rem;
+        margin-bottom: 10px;
+      }
+
+      .card-text {
+        font-size: 0.85rem;
+        line-height: 1.5;
+      }
+
+      .fear-section {
+        padding: 40px 0;
+        width: 90%;
+      }
+
+      .fear-card {
+        padding: 30px 20px;
+      }
+
+      .fear-title {
+        font-size: 1.6rem;
+      }
+
+      .garden-wrapper {
+        padding-bottom: 150px;
+      }
+
+      .bunny-container {
+        width: 50px;
+        left: 15px;
+        bottom: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="stars-container" id="star-field"></div>
+
+  <nav class="zarin-nav">
+    <a href="index.html" class="nav-logo">Z.S.</a>
+    <ul class="nav-links">
+      <li><a href="your-poems.html">Your Poems</a></li>
+      <li><a href="my-feelings.html">My Feelings</a></li>
+      <li><a href="index.html">Home</a></li>
+    </ul>
+  </nav>
+
+  <div class="scene-wrapper">
+    <div class="carousel">
+      <div class="carousel-card active">
+        <div class="card-icon">🕊️</div>
+        <h3 class="card-title">The Name Beneath the Stars</h3>
+        <p class="card-text">
+          I have noticed that Zarin is the name the world knows, but <span class="highlight">Sneha</span> feels like the
+          name the heart protects. It is a name that belongs to closeness, a name kept safe.<br><br>
+          I don't expect to use that name yet. I just wanted you to know that I hold it gently in my heart, like a
+          hidden star I have been allowed to glimpse.
+        </p>
+      </div>
+
+      <div class="carousel-card">
+        <div class="card-icon">🕯️</div>
+        <h3 class="card-title">Lanterns in the Silence</h3>
+        <p class="card-text">
+          I know you don't always reply, and I want you to know that it is okay. You don't owe me words when you don't
+          have the strength.<br><br>
+          My messages are not demands, they are quiet lanterns, reminders that I am here. I will always be here, steady
+          as gravity, waiting without hesitation.
+        </p>
+      </div>
+
+      <div class="carousel-card">
+        <div class="card-icon">📚</div>
+        <h3 class="card-title">The Quiet Strength</h3>
+        <p class="card-text">
+          I have noticed how you slip quietly away during exams, as if the world pauses so you can give yourself fully
+          to your studies. I admire that focus.<br><br>
+          And about Math... I saw your note. Honestly, it was a struggle for me as well. But don't let it weigh you
+          down. Your hard work shines brighter than any grade ever could.
+        </p>
+      </div>
+
+      <div class="carousel-card">
+        <div class="card-icon">🪐</div>
+        <h3 class="card-title">Only the Beginning</h3>
+        <p class="card-text">
+          Three years may sound like a long time, but for me, it is only the beginning. I will keep checking in, maybe
+          not every day, but just enough to let you know the lighthouse is still on.<br><br>
+          I will remain steady, waiting, guiding, reminding you that I am here. And if my presence ever feels too much,
+          just say the word, I will understand.
+        </p>
+      </div>
+    </div>
+
+    <div class="instruction">Swipe or Tap to explore...</div>
+
+    <div class="controls">
+      <button class="control-btn" onclick="rotateCarousel(-1)">Prev</button>
+      <button class="control-btn" onclick="rotateCarousel(1)">Next</button>
+    </div>
+  </div>
+
+  <div class="fear-section">
+    <div class="fear-card">
+      <h2 class="fear-title">Carrying the Girl Within</h2>
+      <p class="fear-text">
+        I saw your wish for tomorrow to not arrive, and I felt the weight behind it. Growing up can feel like being
+        asked to let go of pieces of yourself, or to face truths you would rather keep folded away.
+        <br><br>
+        But time isn't here to erase you. It carries forward the girl who has endured, the one who has written her
+        shadows into poems. She doesn't vanish, she lives inside the woman you are becoming.
+        <br><br>
+        Tomorrow isn't an enemy. It is another page, another chance to carry both your scars and your strength. And in
+        that tomorrow, I will be here, not to rush you, not to demand, but to stand beside you, steady, so you never
+        have to face it alone.
+      </p>
+    </div>
+  </div>
+
+  <div class="garden-wrapper">
+    <div class="garden-text">
+      <h2 class="garden-header">The Seeds of You</h2>
+      <p class="garden-sub">
+        I want to learn about the flowers you love. I want to know the dreams you keep hidden so I can help you protect
+        them.
+      </p>
+      <p class="garden-sub">
+        I don't know them yet, so for now... I will plant this one here for you.
+      </p>
+    </div>
+
+    <div class="seed-container" onclick="bloomFlower()">
+      <div class="seed-btn"></div>
+      <div class="flower-svg">
+        <svg viewBox="0 0 100 200">
+          <path d="M50 200 Q50 150 50 100" stroke="white" fill="none" />
+          <path d="M50 100 Q30 120 20 100 Q30 80 50 100" fill="rgba(212, 165, 165, 0.5)" />
+          <path d="M50 120 Q70 140 80 120 Q70 100 50 120" fill="rgba(212, 165, 165, 0.5)" />
+
+          <circle cx="50" cy="50" r="15" fill="var(--zarins-pink)" opacity="0.8" />
+
+          <path d="M50 50 Q30 10 50 0 Q70 10 50 50" fill="none" stroke="var(--zarins-pink)" stroke-width="2" />
+          <path d="M50 50 Q10 30 0 50 Q10 70 50 50" fill="none" stroke="var(--zarins-pink)" stroke-width="2" />
+          <path d="M50 50 Q90 30 100 50 Q90 70 50 50" fill="none" stroke="var(--zarins-pink)" stroke-width="2" />
+          <path d="M50 50 Q30 90 50 100 Q70 90 50 50" fill="none" stroke="var(--zarins-pink)" stroke-width="2" />
+        </svg>
+      </div>
+    </div>
+
+    <div class="click-hint" id="garden-hint">Tap the seed...</div>
+  </div>
+
+  <div class="bunny-container">
+    <img src="bunny.png" alt="Bunny" class="bunny-img" onerror="this.style.display='none'">
+  </div>
+
+  <script>
+    const starContainer = document.getElementById('star-field');
+    const isMobile = window.innerWidth < 768;
+    const starCount = 138;
+
+    for (let i = 0; i < starCount; i++) {
+      const star = document.createElement('div');
+      star.className = 'star';
+      const x = Math.random() * 100;
+      const y = Math.random() * 100;
+      const size = Math.random() * (isMobile ? 2.5 : 2) + 1;
+      const opacity = Math.random() * 0.7 + 0.3;
+
+      star.style.left = `${x}%`;
+      star.style.top = `${y}%`;
+      star.style.width = `${size}px`;
+      star.style.height = `${size}px`;
+      star.style.opacity = opacity;
+      starContainer.appendChild(star);
+    }
+
+    const carousel = document.querySelector('.carousel');
+    const cards = document.querySelectorAll('.carousel-card');
+    const cardCount = cards.length;
+    let selectedIndex = 0;
+    const radius = isMobile ? 180 : 300;
+    const angle = 360 / cardCount;
+
+    function rotateCarousel(direction = 0) {
+      selectedIndex += direction;
+      updateTransform();
+    }
+
+    function rotateTo(index) {
+      const currentNormalized = ((selectedIndex % cardCount) + cardCount) % cardCount;
+      let diff = index - currentNormalized;
+
+      if (diff > cardCount / 2) diff -= cardCount;
+      if (diff < -cardCount / 2) diff += cardCount;
+
+      selectedIndex += diff;
+      updateTransform();
+    }
+
+    function updateTransform() {
+      const theta = selectedIndex * -angle;
+      carousel.style.transform = `translateZ(-${radius}px) rotateY(${theta}deg)`;
+      updateActiveCard();
+    }
+
+    function updateActiveCard() {
+      let normalizedIndex = selectedIndex % cardCount;
+      if (normalizedIndex < 0) normalizedIndex += cardCount;
+
+      cards.forEach((card, index) => {
+        const cardAngle = index * angle;
+        card.style.transform = `rotateY(${cardAngle}deg) translateZ(${radius}px)`;
+
+        if (index === normalizedIndex) {
+          card.classList.add('active');
+        } else {
+          card.classList.remove('active');
+        }
+      });
+    }
+
+    updateTransform();
+
+    cards.forEach((card, index) => {
+      card.addEventListener('click', () => {
+        rotateTo(index);
+      });
+    });
+
+    function bloomFlower() {
+      const container = document.querySelector('.seed-container');
+      const hint = document.getElementById('garden-hint');
+
+      container.classList.add('bloomed');
+      hint.style.opacity = 0;
+      hint.innerText = "One day, we will plant real ones.";
+
+      setTimeout(() => {
+        hint.style.opacity = 1;
+      }, 2000);
+    }
+
+    const scene = document.querySelector('.scene-wrapper');
+    let startX = 0;
+    let isDragging = false;
+
+    scene.addEventListener('touchstart', (e) => {
+      startX = e.touches[0].clientX;
+      isDragging = true;
+    });
+
+    scene.addEventListener('touchend', (e) => {
+      if (!isDragging) return;
+      const endX = e.changedTouches[0].clientX;
+      const diff = startX - endX;
+
+      if (Math.abs(diff) > 50) {
+        if (diff > 0) rotateCarousel(1);
+        else rotateCarousel(-1);
+      }
+      isDragging = false;
+    });
+
+    scene.addEventListener('mousedown', (e) => {
+      startX = e.clientX;
+      isDragging = true;
+    });
+
+    scene.addEventListener('mouseup', (e) => {
+      if (!isDragging) return;
+      const endX = e.clientX;
+      const diff = startX - endX;
+
+      if (Math.abs(diff) > 50) {
+        if (diff > 0) rotateCarousel(1);
+        else rotateCarousel(-1);
+      }
+      isDragging = false;
+    });
+  </script>
+</body>
+
+</html>
